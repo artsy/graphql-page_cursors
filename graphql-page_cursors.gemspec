@@ -6,7 +6,7 @@ require 'graphql/page_cursors/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-page_cursors'
-  spec.version       = Graphql::PageCursors::VERSION
+  spec.version       = GraphQL::PageCursors::VERSION
   spec.authors       = ['Jon Allured']
   spec.email         = ['jon.allured@gmail.com']
 
