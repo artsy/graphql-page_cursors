@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    graphql-page_cursors (0.1.0)
+    graphql-page_cursors (0.0.1)
 
 GEM
   remote: https://rubygems.org/
