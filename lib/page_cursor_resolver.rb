@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+
 class PageCursorResolver
   MAX_CURSOR_COUNT = 5
 
@@ -41,7 +43,7 @@ class PageCursorResolver
   def first_cursor
     exceeds_max_cursor_count = total_pages > MAX_CURSOR_COUNT
     include_first_cursor =
-      exceeds_max_cursor_count && around_page_numbers.exclude?(1)
+      exceeds_max_cursor_count && !around_page_numbers.include?(1)
     return unless include_first_cursor
 
     page_cursor(1)
@@ -50,7 +52,7 @@ class PageCursorResolver
   def last_cursor
     exceeds_max_cursor_count = total_pages > MAX_CURSOR_COUNT
     include_last_cursor =
-      exceeds_max_cursor_count && around_page_numbers.exclude?(total_pages)
+      exceeds_max_cursor_count && !around_page_numbers.include?(total_pages)
     return unless include_last_cursor
 
     page_cursor(total_pages)
