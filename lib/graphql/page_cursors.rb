@@ -2,8 +2,6 @@
 
 require 'graphql'
 
-require 'graphql/page_cursors/version'
-
 module GraphQL
   class PageCursor < GraphQL::Schema::Object
     field :cursor, String, 'first cursor on the page', null: false

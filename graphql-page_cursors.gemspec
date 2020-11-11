@@ -2,11 +2,11 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'graphql/page_cursors/version'
+require 'page_cursors/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-page_cursors'
-  spec.version       = GraphQL::PageCursors::VERSION
+  spec.version       = PageCursors::VERSION
   spec.authors       = ['Jon Allured']
   spec.email         = ['jon.allured@gmail.com']
 
