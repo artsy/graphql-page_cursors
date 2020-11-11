@@ -7,7 +7,7 @@ require 'graphql/page_cursors/version'
 module GraphQL
   class PageCursor < GraphQL::Schema::Object
     field :cursor, String, 'first cursor on the page', null: false
-    field :isCurrent, Boolean, 'is this the current page?', null: false
+    field :is_current, Boolean, 'is this the current page?', null: false
     field :page, Int, 'page number out of totalPages', null: false
   end
 
