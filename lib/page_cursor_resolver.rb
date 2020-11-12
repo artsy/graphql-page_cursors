@@ -95,10 +95,6 @@ class PageCursorResolver
     node_offset(object.edge_nodes.first) - 1
   end
 
-  def nodes_after
-    node_offset(object.edge_nodes.last)
-  end
-
   def node_offset(node)
     # this was previously accomplished by calling a private method:
     # object.send(:offset_from_cursor, object.cursor_from_node(object.edge_nodes.first))
