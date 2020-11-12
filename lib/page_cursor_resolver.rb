@@ -75,10 +75,6 @@ class PageCursorResolver
     PageCursor.as_hash(current_page, page_number, nodes_per_page)
   end
 
-  def current_page
-    nodes_before / nodes_per_page + 1
-  end
-
   def around_page_numbers # rubocop:disable Metrics/AbcSize
     if total_pages <= MAX_CURSOR_COUNT
       (1..total_pages).to_a
@@ -91,14 +87,11 @@ class PageCursorResolver
     end
   end
 
-  def nodes_before
-    node_offset(object.edge_nodes.first) - 1
-  end
-
-  def node_offset(node)
-    # this was previously accomplished by calling a private method:
-    # object.send(:offset_from_cursor, object.cursor_from_node(object.edge_nodes.first))
-    object_items.index(node) + 1
+  def current_page
+    first_node = object.edge_nodes.first
+    item_index = object_items.index(first_node) || 0
+    nodes_before = item_index + 1
+    nodes_before / nodes_per_page + 1
   end
 
   def nodes_per_page
