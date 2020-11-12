@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'page_cursor'
+require 'basic_page_cursors'
 
 class PageCursorResolver
   MAX_CURSOR_COUNT = 5
@@ -12,15 +13,19 @@ class PageCursorResolver
     @context = context
   end
 
-  def page_cursors
+  def page_cursors # rubocop:disable Metrics/MethodLength
     return if total_pages <= 1
 
-    {
-      around: around_cursors,
-      first: first_cursor,
-      last: last_cursor,
-      previous: previous_cursor
-    }.compact
+    if total_pages <= MAX_CURSOR_COUNT
+      BasicPageCursors.as_hash(total_pages, current_page, per_page)
+    else
+      {
+        around: around_cursors,
+        first: first_cursor,
+        last: last_cursor,
+        previous: previous_cursor
+      }.compact
+    end
   end
 
   def total_pages
