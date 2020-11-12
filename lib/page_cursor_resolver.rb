@@ -34,8 +34,6 @@ class PageCursorResolver
     object.items.size
   end
 
-  private
-
   def around_cursors
     around_page_numbers.map { |page_num| page_cursor(page_num) }
   end
