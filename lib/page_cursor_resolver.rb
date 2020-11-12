@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'base64'
+require 'page_cursor'
 
 class PageCursorResolver
   MAX_CURSOR_COUNT = 5
@@ -65,19 +65,8 @@ class PageCursorResolver
     page_cursor(current_page - 1)
   end
 
-  def page_cursor(page_num)
-    {
-      cursor: cursor_for_page(page_num),
-      is_current: current_page == page_num,
-      page: page_num
-    }
-  end
-
-  def cursor_for_page(page_num)
-    return '' if page_num == 1
-
-    after_cursor = (page_num - 1) * nodes_per_page
-    encode(after_cursor.to_s)
+  def page_cursor(page_number)
+    PageCursor.as_hash(current_page, page_number, nodes_per_page)
   end
 
   def current_page
@@ -112,13 +101,5 @@ class PageCursorResolver
 
   def nodes_per_page
     object.first || object.last
-  end
-
-  # borrowed from https://graphql-ruby.org/api-doc/1.10.6/Base64Bp.html
-  def encode(value)
-    str = Base64.strict_encode64(value)
-    str.tr!('+/', '-_')
-    str.delete!('=')
-    str
   end
 end
