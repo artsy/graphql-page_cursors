@@ -6,6 +6,7 @@ require 'gapped_page_cursors'
 require 'null_page_cursors'
 
 class PageCursorResolver
+  MIN_CURSOR_COUNT = 2
   MAX_CURSOR_COUNT = 5
 
   attr_reader :object, :context
@@ -16,13 +17,7 @@ class PageCursorResolver
   end
 
   def page_cursors
-    if total_pages <= 1
-      NullPageCursors.as_hash(total_pages, current_page, per_page)
-    elsif total_pages <= MAX_CURSOR_COUNT
-      BasicPageCursors.as_hash(total_pages, current_page, per_page)
-    else
-      GappedPageCursors.as_hash(total_pages, current_page, per_page)
-    end
+    cursor_klass.as_hash(total_pages, current_page, per_page)
   end
 
   def total_pages
@@ -41,6 +36,16 @@ class PageCursorResolver
     return object.nodes unless object.respond_to?(:items)
 
     object.items
+  end
+
+  def cursor_klass
+    if total_pages < MIN_CURSOR_COUNT
+      NullPageCursors
+    elsif total_pages <= MAX_CURSOR_COUNT
+      BasicPageCursors
+    else
+      GappedPageCursors
+    end
   end
 
   def current_page
