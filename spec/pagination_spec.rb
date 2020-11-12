@@ -5,7 +5,7 @@ require 'page_cursor_resolver'
 describe 'pagination' do
   context 'with 0 items' do
     it 'has no pages or cursors' do
-      object = double(:object, items: [])
+      object = double(:object, items: [], first: nil, last: nil, edge_nodes: [])
       results = PageCursorResolver.new(object, nil)
 
       expect(results.total_pages).to eq 0
@@ -18,7 +18,7 @@ describe 'pagination' do
     let(:item) { double :item }
 
     it 'has 1 page for 1 item and no cursors' do
-      object = double(:object, items: [item], first: nil, last: nil)
+      object = double(:object, items: [item], first: nil, last: nil, edge_nodes: [])
       results = PageCursorResolver.new(object, nil)
 
       expect(results.total_pages).to eq 1

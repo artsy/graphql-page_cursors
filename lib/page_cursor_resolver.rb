@@ -3,6 +3,7 @@
 require 'page_cursor'
 require 'basic_page_cursors'
 require 'gapped_page_cursors'
+require 'null_page_cursors'
 
 class PageCursorResolver
   MAX_CURSOR_COUNT = 5
@@ -15,9 +16,9 @@ class PageCursorResolver
   end
 
   def page_cursors
-    return if total_pages <= 1
-
-    if total_pages <= MAX_CURSOR_COUNT
+    if total_pages <= 1
+      NullPageCursors.as_hash(total_pages, current_page, per_page)
+    elsif total_pages <= MAX_CURSOR_COUNT
       BasicPageCursors.as_hash(total_pages, current_page, per_page)
     else
       GappedPageCursors.as_hash(total_pages, current_page, per_page)
