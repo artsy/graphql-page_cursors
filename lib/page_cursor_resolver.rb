@@ -37,6 +37,8 @@ class PageCursorResolver
   private
 
   def object_items
+    return object.nodes unless object.respond_to?(:items)
+
     object.items
   end
 
