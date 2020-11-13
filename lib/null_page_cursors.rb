@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-class NullPageCursors
-  def self.as_hash(*_); end
+require 'base_page_cursors'
+
+class NullPageCursors < BasePageCursors
+  def to_hash; end
 end

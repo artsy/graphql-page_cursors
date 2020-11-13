@@ -1,57 +1,9 @@
 # frozen_string_literal: true
 
-class GappedPageCursors
-  def self.as_hash(total_pages, current_page, per_page)
-    new(total_pages, current_page, per_page).to_hash
-  end
+require 'base_page_cursors'
 
-  attr_reader :total_pages, :current_page, :per_page
-
-  def initialize(total_pages, current_page, per_page)
-    @total_pages = total_pages
-    @current_page = current_page
-    @per_page = per_page
-  end
-
-  def to_hash
-    {
-      around: around_cursors,
-      first: first_cursor,
-      last: last_cursor,
-      previous: previous_cursor
-    }.compact
-  end
-
+class GappedPageCursors < BasePageCursors
   private
-
-  def around_cursors
-    around_page_numbers.map { |page_num| page_cursor(page_num) }
-  end
-
-  def first_cursor
-    include_first_cursor = !around_page_numbers.include?(1)
-    return unless include_first_cursor
-
-    page_cursor(1)
-  end
-
-  def last_cursor
-    include_last_cursor = !around_page_numbers.include?(total_pages)
-    return unless include_last_cursor
-
-    page_cursor(total_pages)
-  end
-
-  def previous_cursor
-    include_previous_cursor = current_page > 1
-    return unless include_previous_cursor
-
-    page_cursor(current_page - 1)
-  end
-
-  def page_cursor(page_number)
-    PageCursor.as_hash(current_page, page_number, per_page)
-  end
 
   def around_page_numbers
     if current_page <= 3
@@ -61,5 +13,23 @@ class GappedPageCursors
     else
       [current_page - 1, current_page, current_page + 1]
     end
+  end
+
+  def first_cursor
+    return if around_page_numbers.include?(1)
+
+    cursor_for(1)
+  end
+
+  def last_cursor
+    return if around_page_numbers.include?(total_pages)
+
+    cursor_for(total_pages)
+  end
+
+  def previous_cursor
+    return unless current_page > 1
+
+    cursor_for(current_page - 1)
   end
 end
