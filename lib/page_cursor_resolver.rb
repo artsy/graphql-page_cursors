@@ -24,17 +24,21 @@ class PageCursorResolver
   end
 
   def total_pages
-    return 0 if object.items.size.zero?
+    return 0 if object_items.size.zero?
     return 1 if nodes_per_page.nil?
 
-    (object.items.size.to_f / nodes_per_page).ceil
+    (object_items.size.to_f / nodes_per_page).ceil
   end
 
   def total_count
-    object.items.size
+    object_items.size
   end
 
   private
+
+  def object_items
+    object.items
+  end
 
   def around_cursors
     around_page_numbers.map { |page_num| page_cursor(page_num) }
@@ -96,7 +100,7 @@ class PageCursorResolver
   def node_offset(node)
     # this was previously accomplished by calling a private method:
     # object.send(:offset_from_cursor, object.cursor_from_node(object.edge_nodes.first))
-    object.items.index(node) + 1
+    object_items.index(node) + 1
   end
 
   def nodes_per_page
