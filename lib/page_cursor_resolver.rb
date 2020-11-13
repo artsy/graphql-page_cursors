@@ -25,9 +25,8 @@ class PageCursorResolver
 
   def total_pages
     return 0 if object_items.size.zero?
-    return 1 if nodes_per_page.nil?
 
-    (object_items.size.to_f / nodes_per_page).ceil
+    (object_items.size.to_f / per_page).ceil
   end
 
   def total_count
@@ -72,7 +71,7 @@ class PageCursorResolver
   end
 
   def page_cursor(page_number)
-    PageCursor.as_hash(current_page, page_number, nodes_per_page)
+    PageCursor.as_hash(current_page, page_number, per_page)
   end
 
   def around_page_numbers # rubocop:disable Metrics/AbcSize
@@ -91,10 +90,10 @@ class PageCursorResolver
     first_node = object.edge_nodes.first
     item_index = object_items.index(first_node) || 0
     nodes_before = item_index + 1
-    nodes_before / nodes_per_page + 1
+    nodes_before / per_page + 1
   end
 
-  def nodes_per_page
-    object.first || object.last
+  def per_page
+    object.first || object.last || 1
   end
 end
